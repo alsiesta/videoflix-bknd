@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">
+        {{ message }}
+    </div>
+{% endfor %}
+     <h1>VideoFlix</h1>
+    <div class="center">
+        {% if user.is_authenticated %}
+        <p>Welcome, {{ user.username }}! Thanks for logging in.</p>
+        <a href="{% url 'logout' %}">Logout</a>
+        {% else %}
+        <p>Welcome, guest! Please log in or register.</p>
+        <a href="{% url 'login' %}">Login</a> or
+        <a href="{% url 'register' %}">Register</a>
+        {% endif %}
+   
+
+{% endblock %}
