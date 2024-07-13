@@ -1,4 +1,3 @@
-Hi, {{ user.username }}!
-
-Here is the activation Link:
-{{ protocol }}://{{ domain }}{% url 'activate_account' uidb64=uid token=token %}
+<p>Hi {{ user.username }},</p>
+<p>Thank you for registering. Please click the link below to activate your account:</p>
+<p><a href="{{ activation_link }}">Activate your account</a></p>

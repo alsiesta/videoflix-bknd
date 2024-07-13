@@ -45,30 +45,24 @@ def register_user(request):
             user.is_active = False
             user.save()
 
-            current_site = get_current_site(request)
+            # current_site = get_current_site(request)
             mail_subject = 'Activate your account'
-            protocol = 'https' if request.is_secure() else 'http'
-                 
+            # protocol = 'https' if request.is_secure() else 'http'
+            uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
+            token = account_activation_token.make_token(user)
+            baseUrl = form.data.get('baseUrl')
+            activation_link = f"{baseUrl}/activate/{uidb64}/{token}/"
             message = render_to_string('registration/account_activation_email.html', {
                 'user': user,
-                'domain': current_site.domain,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                'token': account_activation_token.make_token(user),
-                'protocol': protocol,
+                'activation_link': activation_link,
             })
             to_email = form.cleaned_data.get('email')
             email = EmailMessage(mail_subject, message, to=[to_email])
             email.send()
-            
-            messages.success(
-                request, 
-                'Account created successfully. Please check your email to activate your account.'
-            )
-            # return redirect('index') # redirects to backend index page
-            return JsonResponse({'message': 'Account created successfully. Please check your email to activate your account and go to:'}, status=201)
+            return JsonResponse({'message': 'Account created successfully. Please check your email to activate your account.'}, status=201)
         return JsonResponse({'errors': form.errors}, status=400)
     else:
-        return JsonResponse({'error': 'Only POST method is allowed'}, status=405) 
+        return JsonResponse({'error': 'Only POST method is allowed'}, status=405)
 
 
 def activate_account(request, uidb64, token):

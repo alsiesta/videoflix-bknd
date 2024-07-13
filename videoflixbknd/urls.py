@@ -10,5 +10,4 @@ urlpatterns = [
     path('accounts/register/', register_user, name='register'),
     path('activate/<str:uidb64>/<str:token>/', activate_account, name='activate_account'),
     path('accounts/', include('django.contrib.auth.urls') ),
-    path('verification', views.register_user, name='verify_email'),
 ]
