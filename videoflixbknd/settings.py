@@ -27,10 +27,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-vujvv1ruvhk_p_67cz^v!x7oztsqgv0ech(ns2=^t90xzb1s=^'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = []
+DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
+DEV_HOST = os.getenv('DEV_HOST', '127.0.0.1')
+PROD_HOST = os.getenv('PROD_HOST', 'your-production-domain.com')
+
+if DEBUG:
+    ALLOWED_HOSTS = [DEV_HOST, '127.0.0.1', 'localhost']
+else:
+    ALLOWED_HOSTS = [PROD_HOST, 'your-production-domain.com']
+
+
+# ALLOWED_HOSTS = []
 
 CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:3000',
@@ -146,6 +154,13 @@ EMAIL_USE_TLS = True
 # EMAIL_USE_SSL = False
 EMAIL_HOST_USER = mail
 EMAIL_HOST_PASSWORD = mail_pass
+
 # DEFAULT_FROM_EMAIL = mail #recommended in video from Piko can Fly (https://www.youtube.com/watch?v=UV3bZbfEizo&t=221s)
 DEFAULT_FROM_EMAIL = 'noreply<no_reply@domain.com>' #recommended from Django Verify Email (https://pypi.org/project/Django-Verify-Email/)
+
 LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL='/'
+
+# #use this for the email verification, if you don't want to setup the smtp server
+# #this will print the email exchange in the console for debugging
+# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
