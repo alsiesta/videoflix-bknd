@@ -5,6 +5,9 @@ import json
 import os
 from pathlib import Path
 from django.conf import settings
+from urllib.parse import urlencode
+from django.http import HttpResponseRedirect
+
 
 from dotenv import load_dotenv
 
@@ -89,10 +92,19 @@ def activate_account(request, uidb64, token):
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
-        login(request, user)
-        return JsonResponse({'status': 'success', 'message': 'Your account has been successfully activated.', 'username': user.username, 'password': 'YourPasswordHere'})
+        # login(request, user) not needed here as the login is done in the frontend
+        response_data = {
+            'status': 'success',
+            'username': user.username,
+            'message': 'You activated your account successfully. You can now sign in.',
+        }
     else:
-        return JsonResponse({'status': 'error', 'message': 'The activation link is invalid or expired.'}, status=400)
+        response_data = {
+            'status': 'error',
+        }
+    query_string = urlencode(response_data)
+    redirect_url = f'http://localhost:4200/login?{query_string}'
+    return HttpResponseRedirect(redirect_url)
     
 
 from django.views.decorators.csrf import csrf_exempt
@@ -120,8 +132,8 @@ def resend_activation_link(request):
 
             uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
             token = account_activation_token.make_token(user)
-            baseUrl = data.get('baseUrl')
-            activation_link = f"{baseUrl}/activate/{uidb64}/{token}/"
+            # baseUrl = data.get('baseUrl') Funktioniert nicht
+            activation_link = f"http://127.0.0.1:8000/activate/{uidb64}/{token}/"
             mail_subject = 'Activate your account'
             message = render_to_string('registration/account_activation_email.html', {
                 'user': user,
