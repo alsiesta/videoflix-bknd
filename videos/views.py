@@ -15,7 +15,8 @@ def all_videos(request):
             'title': video.title,
             'description': video.description,
             'created_at': video.created_at,
-            'categories': list(video.categories.values('id', 'name'))
+            'categories': list(video.categories.values('id', 'name')),
+            'path': video.path,
         }
         video_list.append(video_data)
     return JsonResponse(video_list, safe=False)
