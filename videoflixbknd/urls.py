@@ -11,6 +11,7 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index, name='index'),
+    path('videos/', include('videos.urls')),
     path('accounts/register/', register_user, name='register'),
     path('activate/<str:uidb64>/<str:token>/', activate_account, name='activate_account'),
     path('resend_activation_link/', resend_activation_link, name='resend_activation_link'),
