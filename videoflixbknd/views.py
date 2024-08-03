@@ -12,7 +12,7 @@ from django.http import HttpResponseRedirect
 from dotenv import load_dotenv
 
 from django.contrib import messages
-from django.contrib.auth import get_user_model, login
+from django.contrib.auth import get_user_model, login, logout
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 from django.http import JsonResponse
@@ -22,11 +22,18 @@ from django.urls import reverse
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
+from django.views.decorators.http import require_http_methods
+from django.http import HttpResponse
 
 from verify_email.email_handler import send_verification_email
 
 from .forms import RegistrationForm
 from .tokens import account_activation_token
+
+@require_http_methods(["GET"])
+def custom_logout(request):
+    logout(request)
+    return redirect('index')
 
 def get_base_url():
     if settings.DEBUG:
