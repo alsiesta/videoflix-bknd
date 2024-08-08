@@ -1,0 +1,14 @@
+{
+    "name": "Django Dev Container",
+    "dockerFile": "Dockerfile",
+    "context": "..",
+    "appPort": [8000],
+    "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance"
+    ],
+    "settings": {
+        "python.pythonPath": "/usr/local/bin/python"
+    },
+    "postCreateCommand": "pip install -r requirements.txt"
+}

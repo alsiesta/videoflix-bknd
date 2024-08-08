@@ -1,11 +1,21 @@
+from django.conf import settings
+
 from django.shortcuts import render
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import cache_page
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
+
 from .models import Video, Favorite
 
+CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
+
+# @login_required 
+@cache_page(CACHE_TTL)
 def all_videos(request):
     videos = Video.objects.all()
     video_list = []

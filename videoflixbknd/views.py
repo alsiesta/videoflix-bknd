@@ -4,6 +4,7 @@ Views for user registration and account activation.
 import json
 import os
 from pathlib import Path
+from unittest.mock import DEFAULT
 from django.conf import settings
 from urllib.parse import urlencode
 from django.http import HttpResponseRedirect
@@ -23,12 +24,17 @@ from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.views.decorators.http import require_http_methods
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import cache_page
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.http import HttpResponse
 
 from verify_email.email_handler import send_verification_email
 
 from .forms import RegistrationForm
 from .tokens import account_activation_token
+
+CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 @require_http_methods(["GET"])
 def custom_logout(request):
@@ -41,6 +47,12 @@ def get_base_url():
     else:
         return settings.PROD_HOST
     
+@login_required
+def password_change_view(request):
+    return render(request, 'registration/password_change_form.html')
+
+@login_required
+@cache_page(CACHE_TTL)
 def index(request):
     """
     Display the index page with any messages.

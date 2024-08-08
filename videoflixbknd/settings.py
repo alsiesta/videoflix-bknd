@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
+    'django_rq',
 ]
 
 MIDDLEWARE = [
@@ -87,15 +88,28 @@ CACHE_TTL = 60 * 15
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379',
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://172.28.165.239:6379/1',
         'OPTIONS': {
-            "PASSWORD": "foobared",
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         },
         "KEY_PREFIX": "videoflix"
     }
 }
+
+RQ_QUEUES = {
+    'default': {
+        'URL': 'redis://172.28.165.239:6379/0',
+        'HOST': '172.28.165.239',
+        'PORT': 6379,
+        'DB': 0,
+        'DEFAULT_TIMEOUT': 360,
+    }
+}
+
+# RQ_EXCEPTION_HANDLERS = ['path.to.my.handler'] # If you need custom exception handlers
+
+
 
 TEMPLATES = [
     {
@@ -204,8 +218,10 @@ EMAIL_HOST_PASSWORD = mail_pass
 # DEFAULT_FROM_EMAIL = mail #recommended in video from Piko can Fly (https://www.youtube.com/watch?v=UV3bZbfEizo&t=221s)
 DEFAULT_FROM_EMAIL = 'noreply<no_reply@domain.com>' #recommended from Django Verify Email (https://pypi.org/project/Django-Verify-Email/)
 
+
+LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL='/'
+LOGOUT_REDIRECT_URL= '/'
 
 # #use this for the email verification, if you don't want to setup the smtp server
 # #this will print the email exchange in the console for debugging
