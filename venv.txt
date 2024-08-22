@@ -1,0 +1,57 @@
+ Volume in Laufwerk C: hat keine Bezeichnung.
+ Volumeseriennummer: 1234-73A0
+
+ Verzeichnis von C:\Users\AlexanderSchönfeld\DEV\__BACKEND\videoflix\videoflix-bknd\venv\Lib\site-packages
+
+05.08.2024  23:26    <DIR>          .
+12.07.2024  09:04    <DIR>          ..
+03.08.2024  16:33    <DIR>          arrow
+03.08.2024  16:33    <DIR>          arrow-1.3.0.dist-info
+12.07.2024  09:05    <DIR>          asgiref
+12.07.2024  09:05    <DIR>          asgiref-3.8.1.dist-info
+03.08.2024  16:14    <DIR>          click
+03.08.2024  16:14    <DIR>          click-8.1.7.dist-info
+03.08.2024  16:14    <DIR>          colorama
+03.08.2024  16:14    <DIR>          colorama-0.4.6.dist-info
+13.07.2024  14:19    <DIR>          corsheaders
+03.08.2024  16:33    <DIR>          dateutil
+03.08.2024  16:33    <DIR>          dateutil-stubs
+16.07.2024  23:57    <DIR>          debug_toolbar
+12.07.2024  09:05    <DIR>          django
+12.07.2024  09:05    <DIR>          Django-5.0.7.dist-info
+12.07.2024  09:05    <DIR>          djangorestframework-3.15.2.dist-info
+16.07.2024  00:03    <DIR>          djangorestframework_simplejwt-5.3.1.dist-info
+13.07.2024  14:19    <DIR>          django_cors_headers-4.4.0.dist-info
+16.07.2024  23:57    <DIR>          django_debug_toolbar-4.4.6.dist-info
+03.08.2024  15:42    <DIR>          django_redis
+03.08.2024  15:42    <DIR>          django_redis-5.4.0.dist-info
+03.08.2024  16:14    <DIR>          django_rq
+03.08.2024  16:14    <DIR>          django_rq-2.10.2.dist-info
+13.07.2024  10:03    <DIR>          Django_Verify_Email-2.0.3.dist-info
+12.07.2024  09:19    <DIR>          dotenv
+16.07.2024  00:03    <DIR>          jwt
+12.07.2024  09:04    <DIR>          pip
+12.07.2024  09:04    <DIR>          pip-24.0.dist-info
+16.07.2024  00:03    <DIR>          PyJWT-2.8.0.dist-info
+03.08.2024  16:33    <DIR>          python_dateutil-2.9.0.post0.dist-info
+12.07.2024  09:19    <DIR>          python_dotenv-1.0.1.dist-info
+03.08.2024  15:42    <DIR>          redis
+03.08.2024  15:42    <DIR>          redis-5.0.8.dist-info
+12.07.2024  09:05    <DIR>          rest_framework
+16.07.2024  00:03    <DIR>          rest_framework_simplejwt
+03.08.2024  16:14    <DIR>          rq
+03.08.2024  16:14    <DIR>          rq-1.16.2.dist-info
+03.08.2024  16:33    <DIR>          six-1.16.0.dist-info
+03.08.2024  16:33            34.549 six.py
+12.07.2024  09:05    <DIR>          sqlparse
+12.07.2024  09:05    <DIR>          sqlparse-0.5.0.dist-info
+03.08.2024  16:33    <DIR>          times
+03.08.2024  16:33    <DIR>          times-0.7.dist-info
+12.07.2024  09:05    <DIR>          tutorial
+03.08.2024  16:33    <DIR>          types_python_dateutil-2.9.0.20240316.dist-info
+12.07.2024  09:05    <DIR>          tzdata
+12.07.2024  09:05    <DIR>          tzdata-2024.1.dist-info
+13.07.2024  10:03    <DIR>          verify_email
+03.08.2024  16:33    <DIR>          __pycache__
+               1 Datei(en),         34.549 Bytes
+              49 Verzeichnis(se), 447.865.921.536 Bytes frei

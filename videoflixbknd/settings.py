@@ -62,7 +62,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'videos.apps.VideosConfig',
-    'debug_toolbar',
+    
     "verify_email.apps.VerifyEmailConfig",
     'rest_framework',
     'rest_framework_simplejwt',
@@ -72,7 +72,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',

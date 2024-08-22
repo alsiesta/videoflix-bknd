@@ -7,16 +7,27 @@ from pathlib import Path
 from unittest.mock import DEFAULT
 from django.conf import settings
 from urllib.parse import urlencode
-from django.http import HttpResponseRedirect
+
 
 
 from dotenv import load_dotenv
 
+from django.views import View
 from django.contrib import messages
 from django.contrib.auth import get_user_model, login, logout
-from django.contrib.sites.shortcuts import get_current_site
-from django.core.mail import EmailMessage
+from django.contrib.auth.models import User
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth.forms import SetPasswordForm
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 from django.http import JsonResponse
+
+from django.contrib.sites.shortcuts import get_current_site
+from django.contrib.auth.decorators import login_required
+from django.core.mail import EmailMessage, send_mail
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
+
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
@@ -24,10 +35,16 @@ from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.views.decorators.http import require_http_methods
-from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import cache_page
-from django.core.cache.backends.base import DEFAULT_TIMEOUT
-from django.http import HttpResponse
+
+from rest_framework.views import APIView
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
+from rest_framework.decorators import api_view, permission_classes
+
+
+from .serializers import PasswordResetRequestSerializer
 
 from verify_email.email_handler import send_verification_email
 
@@ -126,7 +143,6 @@ def activate_account(request, uidb64, token):
     return HttpResponseRedirect(redirect_url)
     
 
-from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def resend_activation_link(request):
@@ -167,3 +183,27 @@ def resend_activation_link(request):
     else:
         return JsonResponse({'error': 'Only POST method is allowed'}, status=405)
 
+class PasswordResetRequestView(APIView):
+    permission_classes = [AllowAny]
+    
+    def post(self, request, *args, **kwargs):
+        serializer = PasswordResetRequestSerializer(data=request.data)
+        if serializer.is_valid():
+            email = serializer.validated_data['email']
+            try:
+                user = User.objects.get(email=email)
+                token = default_token_generator.make_token(user)
+                uid = urlsafe_base64_encode(force_bytes(user.pk))
+                reset_link = request.build_absolute_uri(f'/accounts/reset/{uid}/{token}/')
+                context = {
+                    'user': user,
+                    'reset_link': reset_link,
+                }
+                subject = 'Password Reset Request'
+                message = render_to_string('registration/password_reset_email.html', context)
+                send_mail(subject, message, 'no-reply@videoflix.com', [user.email])
+                return Response({'message': 'Password reset email sent.'}, status=status.HTTP_200_OK)
+            except User.DoesNotExist:
+                return Response({'error': 'User with this email does not exist.'}, status=status.HTTP_404_NOT_FOUND)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
