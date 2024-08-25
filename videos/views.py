@@ -2,7 +2,9 @@ from django.conf import settings
 
 from django.shortcuts import render
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.authentication import TokenAuthentication
+
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.response import Response
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
@@ -16,7 +18,11 @@ CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 # @login_required 
 # @cache_page(CACHE_TTL)
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def all_videos(request):
+    
     videos = Video.objects.all()
     video_list = []
     for video in videos:
@@ -27,6 +33,7 @@ def all_videos(request):
             'created_at': video.created_at,
             'categories': list(video.categories.values('id', 'name')),
             'path': video.path,
+            'imagepath': video.imagepath,
         }
         video_list.append(video_data)
     return JsonResponse(video_list, safe=False)
