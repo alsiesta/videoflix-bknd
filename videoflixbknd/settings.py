@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from datetime import timedelta
 from pathlib import Path
+from re import DEBUG
 from unittest.mock import DEFAULT
 from dotenv import load_dotenv
 import os
@@ -29,24 +30,34 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-vujvv1ruvhk_p_67cz^v!x7oztsqgv0ech(ns2=^t90xzb1s=^'
 
 
-DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
-DEV_HOST = os.getenv('DEV_HOST', '127.0.0.1')
-PROD_HOST = os.getenv('PROD_HOST', 'your-production-domain.com')
+# DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
+# DEV_HOST = os.getenv('DEV_HOST', '127.0.0.1')
+# PROD_HOST = os.getenv('PROD_HOST', 'your-production-domain.com')
 
-if DEBUG:
-    ALLOWED_HOSTS = [DEV_HOST, '127.0.0.1', 'localhost']
-else:
-    ALLOWED_HOSTS = [PROD_HOST, 'your-production-domain.com']
+# if DEBUG:
+#     ALLOWED_HOSTS = [DEV_HOST, '127.0.0.1', 'localhost','localhost:4200']
+# else:
+#     ALLOWED_HOSTS = [PROD_HOST, 'your-production-domain.com']
+DEBUG = True
 
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'localhost:4200']
 
-# ALLOWED_HOSTS = []
-
-CORS_ALLOWED_ORIGINS = [
-    'http://127.0.0.1:3000',
-    'http://localhost:3030',
-]
+# CORS_ALLOWED_ORIGINS = [
+#     'http://localhost:4200',
+#     'http://127.0.0.1:3000',
+#     'http://localhost:3030',
+# ]
 # Application definition
 CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:4200',
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:4200',
+]
+
 
 INTERNAL_IPS = [
     # ...
@@ -62,10 +73,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'videos.apps.VideosConfig',
-    
     "verify_email.apps.VerifyEmailConfig",
     'rest_framework',
-    'rest_framework_simplejwt',
+    'rest_framework.authtoken',
     'corsheaders',
     'django_rq',
 ]
@@ -129,21 +139,12 @@ TEMPLATES = [
 WSGI_APPLICATION = 'videoflixbknd.wsgi.application'
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
 }
 
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'ROTATE_REFRESH_TOKENS': False,
-    'BLACKLIST_AFTER_ROTATION': True,
-    'UPDATE_LAST_LOGIN': False,
-}
 
 
 # Database

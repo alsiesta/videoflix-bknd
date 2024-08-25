@@ -15,7 +15,7 @@ CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 
 # @login_required 
-@cache_page(CACHE_TTL)
+# @cache_page(CACHE_TTL)
 def all_videos(request):
     videos = Video.objects.all()
     video_list = []

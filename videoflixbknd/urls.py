@@ -4,14 +4,18 @@ from django.conf import settings
 from debug_toolbar.toolbar import debug_toolbar_urls
 from django.urls import path, include
 from rest_framework_simplejwt.views import (TokenObtainPairView, TokenRefreshView)
-from .views import index, register_user, activate_account, resend_activation_link, custom_logout, password_change_view, PasswordResetRequestView
+
+from .views import LoginView, index, register_user, activate_account, resend_activation_link, custom_logout, password_change_view, PasswordResetRequestView
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('login/', LoginView.as_view(), name='login'),
     path('django-rq/', include('django_rq.urls')),
     path('', index, name='index'),
     path('videos/', include('videos.urls')),
+    
+    
     path('accounts/', include('django.contrib.auth.urls')),  
     path('accounts/register/', register_user, name='register'),
     path('accounts/password-reset/', PasswordResetRequestView.as_view(), name='password_reset_request'),  
