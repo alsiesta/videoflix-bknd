@@ -14,6 +14,7 @@ urlpatterns = [
     path('django-rq/', include('django_rq.urls')),
     path('', index, name='index'),
     path('videos/', include('videos.urls')),
+    path('user/', include('user.urls')),
     
     
     path('accounts/', include('django.contrib.auth.urls')),  

@@ -67,14 +67,12 @@ class LoginView(ObtainAuthToken):
         return Response({
             'token': token.key,
             'user_id': user.pk,
-            'email': user.email
+            'email': user.email,
+            'username': user.username,
+            'is_active': user.is_active,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
         })
-
-
-
-
-
-
 
 
 @require_http_methods(["GET"])
