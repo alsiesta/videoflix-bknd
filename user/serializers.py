@@ -19,7 +19,6 @@ class PasswordResetSerializer(serializers.Serializer):
     old_password = serializers.CharField(write_only=True, required=True)
     new_password = serializers.CharField(write_only=True, required=True)
     confirm_password = serializers.CharField(write_only=True, required=True)
-
     def validate(self, data):
         user = self.context['request'].user
         if not user.check_password(data['old_password']):

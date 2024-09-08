@@ -41,6 +41,7 @@ class GroupViewSet(viewsets.ModelViewSet):
 def user_reset_password(request):
     serializer = PasswordResetSerializer(data=request.data, context={'request': request})
     if serializer.is_valid():
+        print("PasswordResetSerializer")
         user = request.user
         user.set_password(serializer.validated_data['new_password'])
         user.save()

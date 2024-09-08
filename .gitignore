@@ -14,8 +14,11 @@ venv/
 env_lin/
 db.sqlite3
 
-# Media Files
+# Media and static Files
 media
+static
+staticfiles
+
 # Thumbnails
 ._*
 
