@@ -57,6 +57,9 @@ from .tokens import account_activation_token
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 
+def reset_password_form(request):
+    return render(request, 'user/password_reset_confirm.html')
+
 class LoginView(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data,

@@ -40,6 +40,9 @@ SECRET_KEY = 'django-insecure-vujvv1ruvhk_p_67cz^v!x7oztsqgv0ech(ns2=^t90xzb1s=^
 #     ALLOWED_HOSTS = [PROD_HOST, 'your-production-domain.com']
 DEBUG = True
 
+
+FRONTEND_HOST = os.getenv('FRONTEND_HOST')
+
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'localhost:4200']
 
 # CORS_ALLOWED_ORIGINS = [
@@ -123,7 +126,7 @@ RQ_QUEUES = {
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'videoflixbknd', 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'user', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -138,6 +141,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'videoflixbknd.wsgi.application'
 
+# below sets authentication for each view globally. Which means that every view will require authentication unless explicitly stated otherwise setting empty @authentication_classes([]) and @permission_classes([]) per view
 REST_FRAMEWORK = {
      'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',

@@ -1,7 +1,20 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Group, User
 
+
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = User
+        fields = ['url', 'username', 'email', 'groups']
+
+
+class GroupSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Group
+        fields = ['url', 'name']
+        
+        
 class PasswordResetSerializer(serializers.Serializer):
     old_password = serializers.CharField(write_only=True, required=True)
     new_password = serializers.CharField(write_only=True, required=True)
@@ -15,6 +28,9 @@ class PasswordResetSerializer(serializers.Serializer):
             raise serializers.ValidationError("Passwords do not match.")
         return data
     
+class EmailPasswordResetSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
 
 class RegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)

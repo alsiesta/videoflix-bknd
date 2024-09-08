@@ -5,7 +5,7 @@ from debug_toolbar.toolbar import debug_toolbar_urls
 from django.urls import path, include
 from rest_framework_simplejwt.views import (TokenObtainPairView, TokenRefreshView)
 
-from .views import LoginView, index, register_user, activate_account, resend_activation_link, custom_logout, password_change_view, PasswordResetRequestView
+from .views import LoginView, index, register_user, activate_account, resend_activation_link, custom_logout, password_change_view, PasswordResetRequestView, reset_password_form
 
 
 urlpatterns = [
@@ -17,11 +17,12 @@ urlpatterns = [
     path('user/', include('user.urls')),
     
     
-    path('accounts/', include('django.contrib.auth.urls')),  
-    path('accounts/register/', register_user, name='register'),
-    path('accounts/password-reset/', PasswordResetRequestView.as_view(), name='password_reset_request'),  
-    path('accounts/password_change/', password_change_view, name='password_change'),
-    
+    # path('accounts/', include('django.contrib.auth.urls')),  
+    # path('accounts/register/', register_user, name='register'),
+    # path('accounts/password-reset/', PasswordResetRequestView.as_view(), name='password_reset_request'),  
+    # path('accounts/password_change/', password_change_view, name='password_change'),
+    # path('reset_password_form/', reset_password_form, name='reset_password_form'),
+
     # # this are the default auth urls
     # accounts/ login/ [name='login']
     # accounts/ logout/ [name='logout']
