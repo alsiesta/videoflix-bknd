@@ -1,10 +1,11 @@
 from django.contrib.auth.tokens import default_token_generator
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.shortcuts import render
 from django.contrib.auth.models import Group, User
 from django.template.loader import render_to_string
-from django.utils.http import urlsafe_base64_encode
-from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
 from django.core.mail import send_mail, EmailMultiAlternatives
 
 
@@ -14,9 +15,9 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status, permissions, viewsets
-from .serializers import PasswordResetSerializer, RegistrationSerializer, UserSerializer, GroupSerializer, EmailPasswordResetSerializer
+from .serializers import PasswordResetSerializer, RegistrationSerializer, UserSerializer, GroupSerializer, EmailPasswordResetSerializer, NewPasswordResetSerializer
 
-
+User = get_user_model()
 
 class UserViewSet(viewsets.ModelViewSet):
     """
@@ -48,7 +49,7 @@ def user_reset_password(request):
         return Response({"detail": "Password has been reset successfully."}, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
+# User sends email to reset password
 @api_view(['POST'])
 @authentication_classes([])
 @permission_classes([])
@@ -83,8 +84,30 @@ def mail_reset_password(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@api_view(['POST'])
+@authentication_classes([])
+@permission_classes([])
+def password_reset_confirm(request, uidb64, token):
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user is not None and default_token_generator.check_token(user, token):
+        serializer = NewPasswordResetSerializer(data=request.data)
+        if serializer.is_valid():
+            user.set_password(serializer.validated_data['new_password'])
+            user.save()
+            return Response({"detail": "Password has been reset successfully."}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response({"detail": "Invalid token or user ID."}, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['POST'])
+@authentication_classes([])
+@permission_classes([])
 def register(request):
     serializer = RegistrationSerializer(data=request.data)
     if serializer.is_valid():

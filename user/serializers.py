@@ -31,6 +31,14 @@ class EmailPasswordResetSerializer(serializers.Serializer):
     email = serializers.EmailField()
 
 
+class NewPasswordResetSerializer(serializers.Serializer):
+    new_password = serializers.CharField(write_only=True, required=True, min_length=2)
+
+    def validate_new_password(self, value):
+        # Add any custom validation for the new password here
+        return value
+    
+
 class RegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
@@ -38,6 +46,17 @@ class RegistrationSerializer(serializers.ModelSerializer):
         model = User
         fields = ['username', 'email', 'password', 'first_name', 'last_name']
 
+    def validate_username(self, value):
+        if User.objects.filter(username=value).exists():
+            raise serializers.ValidationError("A user with this username already exists.")
+        return value
+    
+    
+    def validate_email(self, value):
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("A user with this email already exists.")
+        return value
+    
     def create(self, validated_data):
         user = User.objects.create_user(
             username=validated_data['username'],
