@@ -3,6 +3,8 @@ from django.conf import settings
 from django.shortcuts import render
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
+from rest_framework import status
+from .models import Video
 
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.response import Response
@@ -10,6 +12,8 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import cache_page
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
+from .serializers import VideoSerializer
+
 
 from .models import Video, Favorite
 
@@ -37,6 +41,19 @@ def all_videos(request):
         }
         video_list.append(video_data)
     return JsonResponse(video_list, safe=False)
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def get_video_by_id(request, video_id):
+    try:
+        video = Video.objects.get(id=video_id)
+    except Video.DoesNotExist:
+        return Response({"detail": "Video not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = VideoSerializer(video)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
