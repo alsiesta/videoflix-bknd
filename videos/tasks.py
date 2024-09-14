@@ -7,15 +7,16 @@ def convert_video(source, resolution, suffix):
     # file_name, ext = os.path.splitext(source) # Ignore the original extension
     file_name, _ = os.path.splitext(source)
     target = f"{file_name}_{suffix}.m3u8" # Use .m3u8 extension for the playlist
+    # target = f"{file_name}_{suffix}.mp4" # Use .m3u8 extension for the playlist
     
     # Convert Windows paths to WSL-compatible Linux paths
     linux_source = "/mnt/" + source.replace("\\", "/").replace('C:', 'c')
     linux_target = "/mnt/" + target.replace("\\", "/").replace('C:', 'c')
     
-    # # FFmpeg command for Video Transcoding with x264 Codec
+    # FFmpeg command for Video Transcoding with x264 Codec
     # cmd = f'ffmpeg -i "{linux_source}" -s {resolution} -c:v libx264 -crf 23 -c:a aac -strict -2 "{linux_target}"'
     
-    # FFmpeg command for HLS conversion
+    # # FFmpeg command for HLS conversion
     cmd = f'ffmpeg -i "{linux_source}" -s {resolution} -c:v libx264 -crf 23 -c:a aac -strict -2 -start_number 0 -hls_time 10 -hls_list_size 0 -f hls "{linux_target}"'
 
     

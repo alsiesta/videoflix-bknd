@@ -30,7 +30,8 @@ class Video(models.Model):
             # Extract the file extension
             extension = os.path.splitext(self.video_file.name)[1]
             # Generate the path
-            self.path = f"media/videos/{base_name}{extension}"
+            # self.path = f"media/videos/{base_name}{extension}"
+            self.path = f"media/videos/{base_name}.m3u8"
         
         if self.image_file:
             # Extract the file name without extension
