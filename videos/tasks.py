@@ -1,6 +1,8 @@
 import subprocess
 import os
 import shlex
+import platform
+
 
 def convert_video(source, resolution, suffix):
     print('############### Start Video Conversion ###############')
@@ -9,13 +11,22 @@ def convert_video(source, resolution, suffix):
     target = f"{file_name}_{suffix}.m3u8" # Use .m3u8 extension for the playlist
     # target = f"{file_name}_{suffix}.mp4" # Use .m3u8 extension for the playlist
     
-    # Convert Windows paths to WSL-compatible Linux paths
-    linux_source = "/mnt/" + source.replace("\\", "/").replace('C:', 'c')
-    linux_target = "/mnt/" + target.replace("\\", "/").replace('C:', 'c')
+    # # Convert Windows paths to WSL-compatible Linux paths
+    # linux_source = "/mnt/" + source.replace("\\", "/").replace('C:', 'c')
+    # linux_target = "/mnt/" + target.replace("\\", "/").replace('C:', 'c')
     
     # FFmpeg command for Video Transcoding with x264 Codec
     # cmd = f'ffmpeg -i "{linux_source}" -s {resolution} -c:v libx264 -crf 23 -c:a aac -strict -2 "{linux_target}"'
-    
+    system = platform.system()
+
+    if system == 'Windows':
+        # Convert Windows paths to WSL-compatible Linux paths
+        linux_source = "/mnt/" + source.replace("\\", "/").replace(':', '').lower()
+        linux_target = "/mnt/" + target.replace("\\", "/").replace(':', '').lower()
+    else:
+        # On Linux, use the paths as-is
+        linux_source = source
+        linux_target = target
     # # FFmpeg command for HLS conversion
     cmd = f'ffmpeg -i "{linux_source}" -s {resolution} -c:v libx264 -crf 23 -c:a aac -strict -2 -start_number 0 -hls_time 10 -hls_list_size 0 -f hls "{linux_target}"'
 
