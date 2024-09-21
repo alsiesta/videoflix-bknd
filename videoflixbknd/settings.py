@@ -126,7 +126,10 @@ RQ_QUEUES = {
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'user', 'templates')],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'user', 'templates'),
+            os.path.join(BASE_DIR, 'videoflixbknd', 'templates')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

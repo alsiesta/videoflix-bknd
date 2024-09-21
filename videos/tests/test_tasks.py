@@ -28,7 +28,7 @@ class ConvertVideoTest(TestCase):
         # Copy the test video file to the expected location
         test_video_src = os.path.abspath(
             os.path.join(
-                os.path.dirname(__file__), '..', '..', 'testdata', self.source_filename
+                os.path.dirname(__file__), '..', '..', 'datafortesting', self.source_filename
             )
         )
         if not os.path.exists(test_video_src):
