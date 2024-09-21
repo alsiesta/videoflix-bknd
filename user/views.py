@@ -112,6 +112,32 @@ def register(request):
     serializer = RegistrationSerializer(data=request.data)
     if serializer.is_valid():
         user = serializer.save()
+        
+        # Generate token and verification URL
+        token = default_token_generator.make_token(user)
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        verification_url = f"{settings.FRONTEND_HOST}/verify-email/{uid}/{token}/"
+        
+        # Prepare email content
+        subject = "Registration Successful"
+        email_template_name_html = "user/registration_success_email.html"
+        email_template_name_txt = "user/registration_success_email.txt"
+        context = {
+            "username": user.username,
+            "email": user.email,
+            'domain': settings.FRONTEND_HOST,
+            'site_name': 'Your Videoflix',
+            'verification_url': verification_url,  # Include the verification URL in the context
+
+        }
+        email_html = render_to_string(email_template_name_html, context)
+        email_txt = render_to_string(email_template_name_txt, context)
+        
+        # Send email
+        email_message = EmailMultiAlternatives(subject, email_txt, settings.DEFAULT_FROM_EMAIL, [user.email])
+        email_message.attach_alternative(email_html, "text/html")
+        email_message.send(fail_silently=False)
+        
         return Response({
             'user_id': user.pk,
             'username': user.username,
@@ -121,3 +147,21 @@ def register(request):
             'last_name': user.last_name,
         }, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@authentication_classes([])
+@permission_classes([])
+def verify_email(request, uidb64, token):
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user is not None and default_token_generator.check_token(user, token):
+        user.is_active = True
+        user.save(update_fields=['is_active'])
+        return Response({"detail": "Email verified successfully. Your account is now active."}, status=status.HTTP_200_OK)
+    else:
+        return Response({"detail": "Invalid token or user ID."}, status=status.HTTP_400_BAD_REQUEST)

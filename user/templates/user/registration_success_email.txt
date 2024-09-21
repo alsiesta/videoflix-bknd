@@ -1,0 +1,9 @@
+Dear {{ username }},
+
+Thank you for registering at {{ site_name }}.
+
+Please click the link below to verify your email and activate your account:
+{{ verification_url }}
+
+Best regards,
+{{ site_name }} Team
