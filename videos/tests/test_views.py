@@ -11,6 +11,8 @@ class VideoViewTest(TestCase):
     def setUp(self):
         # Create a user and a token
         self.user = User.objects.create_user(username='testuser', password='testpassword')
+        self.user.is_active = True  # Ensure the user is active
+        self.user.save()  # Save the user to apply the changes
         self.token = Token.objects.create(user=self.user)
         
         # Create a category

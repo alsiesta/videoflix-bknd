@@ -9,10 +9,9 @@ from .views import LoginView, index, register_user, activate_account, resend_act
 
 
 urlpatterns = [
+    path('', index, name='index'),
     path('admin/', admin.site.urls),
     path('login/', LoginView.as_view(), name='login'),
-    path('django-rq/', include('django_rq.urls')),
-    path('', index, name='index'),
     path('videos/', include('videos.urls')),
     path('user/', include('user.urls')),    
     path('logout/', custom_logout, name='logout'),    
@@ -20,6 +19,7 @@ urlpatterns = [
     path('resend_activation_link/', resend_activation_link, name='resend_activation_link'),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('django-rq/', include('django_rq.urls')),
 ] + debug_toolbar_urls()
 
 if settings.DEBUG:

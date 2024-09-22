@@ -17,14 +17,26 @@ from django.template import TemplateDoesNotExist
 class LoginViewTest(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.user = User.objects.create_user(username='testuser', email='testuser@example.com', password='testpassword')
+        self.user = User.objects.create_user(
+            username='testuser', 
+            email='testuser@example.com', 
+            password='testpassword'
+        )
+        self.user.is_active = True
+        self.user.save()    
+        print(f"User created: {self.user.username}, {self.user.email}, is_active: {self.user.is_active}")  # Debug user creation
+
 
     def test_login(self):
         data = {
             'username': 'testuser',
             'password': 'testpassword'
         }
-        response = self.client.post(reverse('login'), data)
+        login_url = reverse('login')
+        print(f"Login URL: {login_url}")  # Debug login URL
+        response = self.client.post(login_url, data)
+        print(response.content)  # Debug response content
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn('token', response.data)
 
