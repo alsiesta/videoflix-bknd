@@ -20,8 +20,7 @@ from .models import Video, Favorite
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 
-# @login_required 
-# @cache_page(CACHE_TTL)
+@cache_page(CACHE_TTL)
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
@@ -42,6 +41,7 @@ def all_videos(request):
         video_list.append(video_data)
     return JsonResponse(video_list, safe=False)
 
+@cache_page(CACHE_TTL)
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])

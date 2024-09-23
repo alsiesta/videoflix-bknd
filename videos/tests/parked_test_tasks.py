@@ -8,14 +8,15 @@ class ConvertVideoTest(TestCase):
 
     def setUp(self):
         self.source_filename = "fitness.mp4"
-        self.resolution = "hd720"
-        self.suffix = "720p"
+        self.resolution = "hd480"
+        self.suffix = "480p"
 
         # Determine the correct directory based on the OS
         if os.name == 'nt':  # For Windows
-            self.mnt_dir = os.path.join('C:\\', 'mnt')
+            self.mnt_dir = os.path.join('C:\\', 'Users', 'AlexanderSchönfeld', 'DEV', '__BACKEND', 'videoflix', 'videoflix-bknd', 'media', 'videos')
         else:  # For Unix/Linux/Mac
-            self.mnt_dir = '/mnt'
+            self.mnt_dir = '/mnt/c/Users/AlexanderSchönfeld/DEV/__BACKEND/videoflix/videoflix-bknd/media/videos'
+
 
         # Ensure the directory exists
         os.makedirs(self.mnt_dir, exist_ok=True)
@@ -24,6 +25,7 @@ class ConvertVideoTest(TestCase):
         self.source_path = os.path.join(self.mnt_dir, self.source_filename)
         self.target_filename = f"{os.path.splitext(self.source_filename)[0]}_{self.suffix}.m3u8"
         self.target_path = os.path.join(self.mnt_dir, self.target_filename)
+        print(f"########################### Target path: {self.target_path}")
         
         # Copy the test video file to the expected location
         test_video_src = os.path.abspath(
@@ -45,7 +47,7 @@ class ConvertVideoTest(TestCase):
     def test_convert_video(self):
         try:
             # Pass only the filename if that's what convert_video expects
-            convert_video(self.source_filename, self.resolution, self.suffix)
+            convert_video(self.source_filename, self.resolution)
             # Check if the output file exists at the expected location
             self.assertTrue(os.path.exists(self.target_path), f"Output file not found: {self.target_path}")
         except subprocess.CalledProcessError as e:

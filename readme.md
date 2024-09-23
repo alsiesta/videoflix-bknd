@@ -4,7 +4,8 @@
 
 Videoflix is a backend service for a video streaming platform. This project is built using Django and provides various features such as user registration, password reset, video management, and more.
 
-## Udage
+## Usage
+
 ## Features
 
 - **User Management**: Registration, login, and password reset functionalities.
