@@ -106,3 +106,75 @@ EMAIL_HOST_USER=your-email@example.com
 EMAIL_HOST_PASSWORD=your-email-password
 FRONTEND_HOST=http://localhost:4200
 ```
+
+## PostgreSQL setup
+Start you WSL Client on your windows mashine:
+`source env_lin/bin/activate`
+
+Update **apt** Installation:
+`sudo apt update` and `sudo apt upgrade`
+
+Install postgresql and postgresql-contrib
+`sudo apt install postgresql postgresql-contrib`
+
+Check the postgreSQL status on your Linux mashine:
+`sudo service postgresql status` //check stauts
+`sudo service postgresql start` //start postgresql if needed
+`sudo service postgresql stop` //stop postgresql if needed
+
+*IMPORTANT:* *Switch to the postgres user. User sudo, because you don't want to set the password* *(postgreSQL is by default locked)*
+`sudo -i -u postgres`
+
+*Die PostgreSQL Datenbank läuft nun im Hintergrund auf deiner Linux Mashine als Dienst. Du kannst mit `dpkg -l | grep postgresql` alle PostgreSQL Installationen prüfen.
+
+Exit with `exit`
+
+### Install your PostgreSQL DB
+Open the postgresql client:
+`psql`
+
+Create your Database like so:
+ ``` 
+CREATE DATABASE videoflix;
+CREATE USER Alex WITH PASSWORD 'Test123';
+ALTER ROLE Alex SET client_encoding TO 'utf8';
+ALTER ROLE Alex SET default_transaction_isolation TO 'read committed';
+ALTER ROLE Alex SET timezone TO 'UTC';
+GRANT ALL PRIVILEGES ON DATABASE videoflix TO Alex;
+```
+
+List your databases:
+`\l`
+
+Exit the PostgreSQL terminal:
+`\q`
+
+Remember! PostgreSQL must be running on you mashine:
+`sudo service postgresql start`
+
+You have to be the "postgres" user:
+`sudo -i -u postgres`
+
+The PostgreSQL Client must be running:
+`psql` 
+
+Then you can list your db's with `\l`
+
+### Connect Django with PostgreSQL
+Install an adapter that helps to connect:
+`pip install psycopg2-binary` 
+
+Open via WSL you Django settings.py and add the database configuratin:
+```
+DATABASES = {
+	'default': {
+		'ENGINE': 'django.db.backends.postgresql',
+		'NAME': 'videoflix',
+		'USER': 'Alex',
+		'PASSWORD': 'Test123',
+		'HOST': 'localhost',
+		'PORT': '',
+	}
+}
+```
+
