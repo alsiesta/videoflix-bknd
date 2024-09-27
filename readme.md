@@ -2,9 +2,7 @@
 
 ## Overview
 
-Videoflix is a backend service for a video streaming platform. This project is built using Django and provides various features such as user registration, password reset, video management, and more.
-
-## Usage
+Videoflix is a backend service for a video streaming platform. This project is built using Django and it provides various features such as user registration, password reset, video management, and more.
 
 ## Features
 
@@ -16,41 +14,47 @@ Videoflix is a backend service for a video streaming platform. This project is b
 - **Admin Interface**: Manage users, videos, and other data through Django's admin interface.
 
 ## Prerequisites
+- Python 3.12
+- PostgreSQL Database
 
-- Docker
-- Docker Compose
-- Python 3.9+
-- Redis
+## Setup & Starting the App
+Open CMD at Root Directory level and run
+1. **Create a virtual environment with:** `python -m venv env`
+2. **Start the virtual environment with:** `"env/Scripts/activate"` or `.\\env\Scripts\activate`
+3. **Install dependencies with:** `pip install -r requirements.txt`
+4. **Set Global Environment Variables in '.env' file:** Rename the document **.env_example** to **.env** and adjust its variable values:
+   
+```
+//.env
+EMAIL_HOST_USER = 'my email'
+EMAIL_HOST_PASSWORD = 'my_email_password'
+DJANGO_DEBUG=True
+DEV_HOST='http://localhost'
+PROD_HOST='http://mysite.com'
+FRONTEND_HOST='localhost:4200'
+```
 
-## Setup
+5. **Setup PostgreSQL DB:** Create a PostgreSQL DB by the name **"videoflix_db"**
+6. **Adjust settings.py to connect to your PostgreSQL DB like so:**
+   ```
+   DATABASES = {
+       'default': {
+           'ENGINE': 'django.db.backends.postgresql',
+           'NAME': 'videoflix_db',
+           'USER': 'postgres',
+           'PASSWORD': 'MySuper1234Pa$$word',
+           'HOST': 'localhost',
+           'PORT': '5432',
+       }
+   }
+   ```
+7. **Create your Data Base by running:** `python manage.py makemigrations` AND `python manage.py migrate`
+8. **Create SuperUser for Django Admin:** `python manage.py createsuperuser`
+9.  Run `start_all.bat` to start the Django Backend in one cli and Redis + the RQ Worker in another cli.
+10.  
 
-### Using Docker
 
-1. **Clone the repository**:
-    ```sh
-    git clone https://github.com/yourusername/videoflix-bknd.git
-    cd videoflix-bknd
-    ```
-
-2. **Build and run the Docker container**:
-    ```sh
-    docker build -t videoflix-bknd -f .devcontainer/Dockerfile .
-    ```
-
-3. **Run migrations**:
-    ```sh
-    docker-compose exec web python manage.py migrate
-    ```
-
-4. **Create a superuser**:
-    ```sh
-    docker-compose exec web python manage.py createsuperuser
-    ```
-
-5. **Access the application**:
-    - The application will be available at `http://localhost:8000`
-    - The admin interface will be available at `http://localhost:8000/admin`
-
+This will 
 ### Local Development
 
 1. **Clone the repository**:
