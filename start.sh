@@ -17,6 +17,9 @@ sudo service postgresql start
 
 echo "Creating PostgreSQL database 'videoflix_db'..."
 sudo -u postgres CREATE DATABASE videoflix_db
+
+echo "Listing PostgreSQL databases..."
+sudo "\l"
 \q
 
 echo "Creating virtual environment..."
@@ -34,5 +37,21 @@ pip install -r requirements.txt
 echo "Starting RQ worker..."
 # While Redis is automatically in Ubuntu the rq worker needs to be started manually
 python3 manage.py rqworker default
+
+echo "Create database tables..."
+python3 manage.py makemigrations
+python3 manage.py migrate
+
+echo "Creating superuser..."
+expect << EOF
+spawn python3 manage.py createsuperuser --username Alex --email ""
+expect "Password:"
+send "12\r"
+expect "Password (again):"
+send "12\r"
+expect "Bypass password validation and create user anyway? (y/N)"
+send "y\r"
+expect eof
+EOF
 
 echo "All tasks completed."
