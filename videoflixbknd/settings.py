@@ -177,7 +177,7 @@ DATABASES = {
 		'ENGINE': 'django.db.backends.postgresql',
 		'NAME': 'videoflix_db',
 		'USER': 'postgres',
-		'PASSWORD': 'Pa$$w0rd1234',
+		'PASSWORD': 'Test123',
 		'HOST': 'localhost',
 		'PORT': '5432',
 	}
