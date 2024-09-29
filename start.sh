@@ -1,5 +1,5 @@
 #!/bin/bash
-# set -e
+set -e
 
 echo "----------- Updating package list..."
 sudo apt update
