@@ -15,170 +15,69 @@ Videoflix is a backend service for a video streaming platform. This project is b
 
 ## Prerequisites
 - Python 3.12
-- PostgreSQL Database
+- *"WSL active on you Windows Mashine"* or you work on Linux
 
-## Setup & Starting the App
-Open CMD at Root Directory level and run
-1. **Create a virtual environment with:** `python -m venv env`
-2. **Start the virtual environment with:** `"env/Scripts/activate"` or `.\\env\Scripts\activate`
-3. **Install dependencies with:** `pip install -r requirements.txt`
-4. **Set Global Environment Variables in '.env' file:** Rename the document **.env_example** to **.env** and adjust its variable values:
-   
+## Setup
+Rename the '.env_example' file to simply '.env'
+For review purposes by the "Developer Akademie" I left my personal credentials in this file like so: 
+
 ```
 //.env
-EMAIL_HOST_USER = 'my email'
-EMAIL_HOST_PASSWORD = 'my_email_password'
+EMAIL_HOST_USER = 'schoenfeldalexander@googlemail.com'
+EMAIL_HOST_PASSWORD = 'ktmw rklg aurw fder'
 DJANGO_DEBUG=True
 DEV_HOST='http://localhost'
 PROD_HOST='http://mysite.com'
 FRONTEND_HOST='localhost:4200'
 ```
 
-5. **Setup PostgreSQL DB:** Create a PostgreSQL DB by the name **"videoflix_db"**
-6. **Adjust settings.py to connect to your PostgreSQL DB like so:**
+## Setup & Starting the App
+Open the WSL (Ubuntu or Bash) shell at Root Directory level.
+
+Then either run `source start.sh` or `./start.sh`.
+(The first command keeps the virtual environment visible in the terminal during the installation process. The second runs the installation in a subshell. The results are identical.)
+
+**IMPORTANT:** 
+- During installation you have to submit a name for the PostgreSQL database. Name it **"videoflix_db"** 
+- During installation you also have to give the superuser a **name, email and password**.
+
+That's it.
+
+### What happens during installation:
+1. **Upgrading apt package manager**
+2. **Installing all required packages like:** postgresql, postgresql-contrib, expect, python3-venv
+3. **Starting the PostgreSQL service in your WSL**
+4. **Setting the PostgreSQL default user password to "Test123"**
+5. **Creation of PostgreSQL database**
+   1. When prompted to give the db a name type: **"videoflix_db"**
+6. **Listing the PostgreSQL databases for controlling**
+7. **Creation of the virtual environment "myvenv"**
+8. **Starting the virtual environment**
+9. **Installation of all dependencies in Virtual Env.**
+10. **Migrating the Django DB to PostgreSQL DB**
+11. **Starting Redis Que Worker in a subshell**
+    1.  this will run the Video Formating Processes in parallel and
+    2.  it runs the Cache
+12. **Checking if port 8000 is available**
+13. **Starting the Django Backend-Server on port 8000**
+14. If you started the script with "source start.sh" the Django Admin UI will open in your browser under: http://127.0.0.1:8000/admin
+
+
+### Note:
+In the settings.py file of the Django App, the Database Settings should look like so now:
    ```
    DATABASES = {
        'default': {
            'ENGINE': 'django.db.backends.postgresql',
            'NAME': 'videoflix_db',
            'USER': 'postgres',
-           'PASSWORD': 'MySuper1234Pa$$word',
+           'PASSWORD': 'Test123',
            'HOST': 'localhost',
            'PORT': '5432',
        }
    }
+
    ```
-7. **Create your Data Base by running:** `python manage.py makemigrations` AND `python manage.py migrate`
-8. **Create SuperUser for Django Admin:** `python manage.py createsuperuser`
-9.  Run `start_all.bat` to start the Django Backend in one cli and Redis + the RQ Worker in another cli.
-10.  
 
 
-This will 
-### Local Development
-
-1. **Clone the repository**:
-    ```sh
-    git clone https://github.com/yourusername/videoflix-bknd.git
-    cd videoflix-bknd
-    ```
-
-2. **Create a virtual environment**:
-    ```sh
-    python -m venv env
-    source env/bin/activate  # On Windows use `env\Scripts\activate`
-    ```
-
-3. **Install dependencies**:
-    ```sh
-    pip install -r requirements.txt
-    ```
-
-4. **Run migrations**:
-    ```sh
-    python manage.py migrate
-    ```
-
-5. **Create a superuser**:
-    ```sh
-    python manage.py createsuperuser
-    ```
-
-6. **Start the development server**:
-    ```sh
-    python manage.py runserver
-    ```
-
-7. **Start the Redis worker**:
-    ```sh
-    ./start_rq_worker.sh
-    ```
-
-8. **Access the application**:
-    - The application will be available at `http://localhost:8000`
-    - The admin interface will be available at `http://localhost:8000/admin`
-
-## Configuration
-
-### Environment Variables
-
-Create a `.env` file in the root directory and add the following variables:
-
-```
-//.env
-EMAIL_HOST_USER=your-email@example.com
-EMAIL_HOST_PASSWORD=your-email-password
-FRONTEND_HOST=http://localhost:4200
-```
-
-## PostgreSQL setup
-Start you WSL Client on your windows mashine:
-`source env_lin/bin/activate`
-
-Update **apt** Installation:
-`sudo apt update` and `sudo apt upgrade`
-
-Install postgresql and postgresql-contrib
-`sudo apt install postgresql postgresql-contrib`
-
-Check the postgreSQL status on your Linux mashine:
-`sudo service postgresql status` //check stauts
-`sudo service postgresql start` //start postgresql if needed
-`sudo service postgresql stop` //stop postgresql if needed
-
-*IMPORTANT:* *Switch to the postgres user. User sudo, because you don't want to set the password* *(postgreSQL is by default locked)*
-`sudo -i -u postgres`
-
-*Die PostgreSQL Datenbank läuft nun im Hintergrund auf deiner Linux Mashine als Dienst. Du kannst mit `dpkg -l | grep postgresql` alle PostgreSQL Installationen prüfen.
-
-Exit with `exit`
-
-### Install your PostgreSQL DB
-Open the postgresql client:
-`psql`
-
-Create your Database like so:
- ``` 
-CREATE DATABASE videoflix;
-CREATE USER Alex WITH PASSWORD 'Test123';
-ALTER ROLE Alex SET client_encoding TO 'utf8';
-ALTER ROLE Alex SET default_transaction_isolation TO 'read committed';
-ALTER ROLE Alex SET timezone TO 'UTC';
-GRANT ALL PRIVILEGES ON DATABASE videoflix TO Alex;
-```
-
-List your databases:
-`\l`
-
-Exit the PostgreSQL terminal:
-`\q`
-
-Remember! PostgreSQL must be running on you mashine:
-`sudo service postgresql start`
-
-You have to be the "postgres" user:
-`sudo -i -u postgres`
-
-The PostgreSQL Client must be running:
-`psql` 
-
-Then you can list your db's with `\l`
-
-### Connect Django with PostgreSQL
-Install an adapter that helps to connect:
-`pip install psycopg2-binary` 
-
-Open via WSL you Django settings.py and add the database configuratin:
-```
-DATABASES = {
-	'default': {
-		'ENGINE': 'django.db.backends.postgresql',
-		'NAME': 'videoflix',
-		'USER': 'Alex',
-		'PASSWORD': 'Test123',
-		'HOST': 'localhost',
-		'PORT': '',
-	}
-}
-```
 
