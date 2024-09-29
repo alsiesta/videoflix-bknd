@@ -18,7 +18,7 @@ Videoflix is a backend service for a video streaming platform. This project is b
 - *"WSL active on you Windows Mashine"* or you work on Linux
 
 ## Setup
-Rename the '.env_example' file to simply '.env'
+Rename the **'.env_example'** file to **'.env'**
 For review purposes by the "Developer Akademie" I left my personal credentials in this file like so: 
 
 ```
@@ -32,16 +32,21 @@ FRONTEND_HOST='localhost:4200'
 ```
 
 ## Setup & Starting the App
-Open the WSL (Ubuntu or Bash) shell at Root Directory level.
+**A.** Open the WSL (Ubuntu/Bash) shell at Root Directory level.
 
-Then either run `source start.sh` or `./start.sh`.
+**B.** Then either run `source start.sh` or `./start.sh`.
 (The first command keeps the virtual environment visible in the terminal during the installation process. The second runs the installation in a subshell. The results are identical.)
 
 **IMPORTANT:** 
-- During installation you have to submit a name for the PostgreSQL database. Name it **"videoflix_db"** 
-- During installation you also have to give the superuser a **name, email and password**.
+- **Step 5** during installation you have to submit a name for the PostgreSQL database. Name it **"videoflix_db"** 
+- **Step 9** may take 4-5 minutes!
+- **Step 11** during installation you also have to give the superuser a **name, email and password**.
+- When the backend is up and running, you have to upload minimum one video to the backenend **AND** you have to define and add a "Movie Category" of your choice (s. screenshot): 
+![Create Category in Django Admin](static/images/create_category_in_django_admin.png)
 
 That's it.
+
+________________
 
 ### What happens during installation:
 1. **Upgrading apt package manager**
@@ -53,18 +58,20 @@ That's it.
 6. **Listing the PostgreSQL databases for controlling**
 7. **Creation of the virtual environment "myvenv"**
 8. **Starting the virtual environment**
-9. **Installation of all dependencies in Virtual Env.**
+9. **Installation of all dependencies into the Virtual Environment**
 10. **Migrating the Django DB to PostgreSQL DB**
-11. **Starting Redis Que Worker in a subshell**
+11. **Creating Django Admin Superuser**
+    1.  When prompted submit a **username, email, password**
+12. **Starting Redis Que Worker in a subshell**
     1.  this will run the Video Formating Processes in parallel and
     2.  it runs the Cache
-12. **Checking if port 8000 is available**
-13. **Starting the Django Backend-Server on port 8000**
-14. If you started the script with "source start.sh" the Django Admin UI will open in your browser under: http://127.0.0.1:8000/admin
+13. **Checking if port 8000 is available**
+14. **Starting the Django Backend-Server on port 8000**
+15. If you started the script with "source start.sh" the Django Admin UI will open in your browser under: http://127.0.0.1:8000/admin
 
 
 ### Note:
-In the settings.py file of the Django App, the Database Settings should look like so now:
+In the settings.py file of the Django App, the Database Settings should look like so now. The password is setting during installation. The name is set by yourself during installation and it should be = "videoflix_db"
    ```
    DATABASES = {
        'default': {
