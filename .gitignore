@@ -11,6 +11,7 @@ Icon
 # Virtual Environments
 .env
 venv/
+myvenv/
 env_lin/
 db.sqlite3
 
