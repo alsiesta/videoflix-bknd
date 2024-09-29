@@ -1,8 +1,10 @@
 # Videoflix Backend
-
-## Overview
+Public repository: https://github.com/alsiesta/videoflix-bknd
 
 Videoflix is a backend service for a video streaming platform. This project is built using Django and it provides various features such as user registration, password reset, video management, and more.
+
+This app has a frontend app you can find here: https://github.com/alsiesta/videoflix
+
 
 ## Features
 
@@ -31,11 +33,16 @@ PROD_HOST='http://mysite.com'
 FRONTEND_HOST='localhost:4200'
 ```
 
+
 ## Setup & Starting the App
 **A.** Open the WSL (Ubuntu/Bash) shell at Root Directory level.
 
 **B.** Then either run `source start.sh` or `./start.sh`.
 (The first command keeps the virtual environment visible in the terminal during the installation process. The second runs the installation in a subshell. The results are identical.)
+
+**<span style="color:red;">Note:</span>** It is possible that you have edit the line endings of the start.sh file, when you get an error in the shell. Then run the following command in bash: `dos2unix start.sh`. Afterwards, run the script again. It should work.
+Install the tool if you don't have it with: `sudo apt install dos2unix`
+
 
 **IMPORTANT:** 
 - **Step 5** during installation you have to submit a name for the PostgreSQL database. Name it **"videoflix_db"** 
