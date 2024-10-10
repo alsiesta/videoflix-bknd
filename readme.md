@@ -16,8 +16,35 @@ This app has a frontend app you can find here: https://github.com/alsiesta/video
 - **Admin Interface**: Manage users, videos, and other data through Django's admin interface.
 
 ## Prerequisites
+**Dev:**
 - Python 3.12
 - *"WSL active on you Windows Mashine"* or you work on Linux
+
+**Production:**
+- Python 3.12
+- Ubuntu 20.04.6 LTS
+- postgresql postgresql-contrib
+```
+sudo apt update
+
+#install Ubuntu 20.04 LTS
+sudo apt install software-properties-common -y
+sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt update
+
+# install python
+sudo apt install python3.11
+
+# set default python version
+sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 1
+
+# install postgreSQL
+sudo apt install postgresql postgresql-contrib
+
+# Check Installation
+psql --version #checks PostgrSQL Version
+lsb_release -a  #checks Ubuntu Instance
+```
 
 ## Setup
 Rename the **'.env_example'** file to **'.env'**

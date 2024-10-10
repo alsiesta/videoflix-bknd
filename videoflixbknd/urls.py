@@ -1,8 +1,11 @@
 from django.contrib import admin
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf.urls.static import static
 from django.conf import settings
-from debug_toolbar.toolbar import debug_toolbar_urls
 from django.urls import path, include
+
+from debug_toolbar.toolbar import debug_toolbar_urls
+
 from rest_framework_simplejwt.views import (TokenObtainPairView, TokenRefreshView)
 
 from .views import LoginView, index, register_user, activate_account, resend_activation_link, custom_logout, password_change_view, PasswordResetRequestView, reset_password_form
@@ -20,7 +23,7 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('django-rq/', include('django_rq.urls')),
-] + debug_toolbar_urls()
+] + debug_toolbar_urls() + staticfiles_urlpatterns()
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -226,7 +226,7 @@ MEDIA_URL = '/media/'
 STATIC_URL = 'static/'
 # STATICS_DIRS = [BASE_DIR / 'static']
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_collected')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -241,44 +241,12 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-# EMAIL_USE_SSL = False
 EMAIL_HOST_USER = mail
 EMAIL_HOST_PASSWORD = mail_pass
 
-# DEFAULT_FROM_EMAIL = mail #recommended in video from Piko can Fly (https://www.youtube.com/watch?v=UV3bZbfEizo&t=221s)
 DEFAULT_FROM_EMAIL = 'noreply<no_reply@domain.com>' #recommended from Django Verify Email (https://pypi.org/project/Django-Verify-Email/)
 
 
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL= '/'
-
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'handlers': {
-#         'console': {
-#             'class': 'logging.StreamHandler',
-#         },
-#     },
-#     'root': {
-#         'handlers': ['console'],
-#         'level': 'DEBUG',
-#     },
-#     'loggers': {
-#         'django': {
-#             'handlers': ['console'],
-#             'level': 'DEBUG',
-#             'propagate': True,
-#         },
-#         'user': {
-#             'handlers': ['console'],
-#             'level': 'DEBUG',
-#             'propagate': True,
-#         },
-#     },
-# }
-
-# #use this for the email verification, if you don't want to setup the smtp server
-# #this will print the email exchange in the console for debugging
-# EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
