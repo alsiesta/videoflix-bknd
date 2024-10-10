@@ -1,3 +1,4 @@
+
 """
 Django settings for videoflixbknd project.
 
@@ -43,7 +44,8 @@ DEBUG = True
 
 FRONTEND_HOST = os.getenv('FRONTEND_HOST')
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'localhost:4200']
+# ALLOWED_HOSTS = ['videoflix.alsiesta.com/login','videoflix.alsiesta.com', '35.242.249.215', 'localhost', '127.0.0.1', 'localhost:4200']
+ALLOWED_HOSTS = ['*']
 
 # CORS_ALLOWED_ORIGINS = [
 #     'http://localhost:4200',
@@ -54,11 +56,12 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'localhost:4200']
 CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:4200',
+    'http://localhost:4200','http://videoflix.alsiesta.com/login','https://videoflix.alsiesta.com/login/'
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:4200',
+    'https://videoflix.alsiesta.com',
 ]
 
 
@@ -102,7 +105,7 @@ CACHE_TTL = 0
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://172.28.165.239:6379/1',
+        'LOCATION': 'redis://10.156.0.2:6379/1',
         'OPTIONS': {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         },
@@ -112,8 +115,8 @@ CACHES = {
 
 RQ_QUEUES = {
     'default': {
-        'URL': 'redis://172.28.165.239:6379/0',
-        'HOST': '172.28.165.239',
+        'URL': 'redis://10.156.0.2:6379/0',
+        'HOST': '10.156.0.2',
         'PORT': 6379,
         'DB': 0,
         'DEFAULT_TIMEOUT': 360,

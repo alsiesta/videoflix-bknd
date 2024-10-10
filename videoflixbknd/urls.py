@@ -7,6 +7,7 @@ from django.urls import path, include
 from debug_toolbar.toolbar import debug_toolbar_urls
 
 from rest_framework_simplejwt.views import (TokenObtainPairView, TokenRefreshView)
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from .views import LoginView, index, register_user, activate_account, resend_activation_link, custom_logout, password_change_view, PasswordResetRequestView, reset_password_form
 
@@ -23,8 +24,9 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('django-rq/', include('django_rq.urls')),
-] + debug_toolbar_urls() + staticfiles_urlpatterns()
+]+ debug_toolbar_urls() + staticfiles_urlpatterns()
 
-if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# if settings.DEBUG:
+#    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+#    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
