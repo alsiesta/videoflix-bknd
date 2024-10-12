@@ -21,6 +21,7 @@ from django.contrib.auth.forms import SetPasswordForm
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.http import JsonResponse
+from django.middleware.csrf import get_token
 
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.decorators import login_required
@@ -67,7 +68,9 @@ class LoginView(ObtainAuthToken):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
-        return Response({
+        csrf_token = get_token(request)
+        
+        response = Response({
             'token': token.key,
             'user_id': user.pk,
             'email': user.email,
@@ -76,6 +79,9 @@ class LoginView(ObtainAuthToken):
             'first_name': user.first_name,
             'last_name': user.last_name,
         })
+        response['X-CSRFToken'] = csrf_token
+
+        return response
 
 
 @require_http_methods(["GET"])

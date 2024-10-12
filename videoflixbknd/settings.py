@@ -19,16 +19,13 @@ import os
 
 load_dotenv()
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-vujvv1ruvhk_p_67cz^v!x7oztsqgv0ech(ns2=^t90xzb1s=^'
-
 
 # DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 # DEV_HOST = os.getenv('DEV_HOST', '127.0.0.1')
@@ -38,19 +35,14 @@ SECRET_KEY = 'django-insecure-vujvv1ruvhk_p_67cz^v!x7oztsqgv0ech(ns2=^t90xzb1s=^
 #     ALLOWED_HOSTS = [DEV_HOST, '127.0.0.1', 'localhost','localhost:4200']
 # else:
 #     ALLOWED_HOSTS = [PROD_HOST, 'your-production-domain.com']
-DEBUG = True
+DEBUG = False
 
 
 FRONTEND_HOST = os.getenv('FRONTEND_HOST')
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'localhost:4200']
 
-# CORS_ALLOWED_ORIGINS = [
-#     'http://localhost:4200',
-#     'http://127.0.0.1:3000',
-#     'http://localhost:3030',
-# ]
-# Application definition
+
 CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOWED_ORIGINS = [
@@ -120,9 +112,6 @@ RQ_QUEUES = {
     }
 }
 
-# RQ_EXCEPTION_HANDLERS = ['path.to.my.handler'] # If you need custom exception handlers
-
-
 
 TEMPLATES = [
     {
@@ -145,7 +134,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'videoflixbknd.wsgi.application'
 
-# below sets authentication for each view globally. Which means that every view will require authentication unless explicitly stated otherwise setting empty @authentication_classes([]) and @permission_classes([]) per view
 REST_FRAMEWORK = {
      'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
@@ -157,21 +145,6 @@ REST_FRAMEWORK = {
     ],
 }
 
-
-
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
-
-
-# DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': BASE_DIR / 'db.sqlite3',
-#    }
-# }
-
-
 DATABASES = {
 	'default': {
 		'ENGINE': 'django.db.backends.postgresql',
@@ -182,10 +155,6 @@ DATABASES = {
 		'PORT': '5432',
 	}
 }
-
-
-# Password validation
-# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -216,20 +185,12 @@ USE_I18N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.0/howto/static-files/
-
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 STATIC_URL = 'static/'
-# STATICS_DIRS = [BASE_DIR / 'static']
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_collected')
-
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
