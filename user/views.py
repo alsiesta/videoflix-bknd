@@ -79,7 +79,7 @@ def mail_reset_password(request):
                 email_message.attach_alternative(email_html, "text/html")
                 email_message.send(fail_silently=False)
                 
-            return Response({"detail": "If this email: " + user.email + " exist, we have sent a reset link to it."}, status=status.HTTP_200_OK)
+            return Response({"detail": "If this email: " + user.email + " exists, we have sent a reset link to it."}, status=status.HTTP_200_OK)
         return Response({"detail": "No user is associated with this email address."}, status=status.HTTP_404_NOT_FOUND)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
