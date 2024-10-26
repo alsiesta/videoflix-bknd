@@ -1,7 +1,10 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import Group, User
+from django.contrib.auth import get_user_model
 
+# created a custom user model which extends the AbstractUser model so it has to be imported first
+User = get_user_model()
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -44,7 +47,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'first_name', 'last_name']
+        fields = ['username', 'email', 'password', 'first_name', 'last_name', 'story', 'phone', 'address']
 
     def validate_username(self, value):
         if User.objects.filter(username=value).exists():
@@ -63,6 +66,9 @@ class RegistrationSerializer(serializers.ModelSerializer):
             email=validated_data['email'],
             password=validated_data['password'],
             first_name=validated_data.get('first_name', ''),
-            last_name=validated_data.get('last_name', '')
+            last_name=validated_data.get('last_name', ''),
+            story=validated_data.get('story', ''),
+            phone=validated_data.get('phone', ''),
+            address=validated_data.get('address', '')
         )
         return user
