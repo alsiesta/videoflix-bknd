@@ -40,6 +40,19 @@ class GroupViewSet(viewsets.ModelViewSet):
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def user_reset_password(request):
+    """
+    Allows an authenticated user to reset their password.
+
+    Request:
+        - Method: POST
+        - Authentication: TokenAuthentication
+        - Permissions: IsAuthenticated
+        - Body: JSON object containing the new password.
+
+    Response:
+        - 200 OK: Password has been reset successfully.
+        - 400 Bad Request: Invalid data provided.
+    """
     serializer = PasswordResetSerializer(data=request.data, context={'request': request})
     if serializer.is_valid():
         print("PasswordResetSerializer")
@@ -54,6 +67,20 @@ def user_reset_password(request):
 @authentication_classes([])
 @permission_classes([])
 def mail_reset_password(request):
+    """
+    Sends a password reset email to the user.
+
+    Request:
+        - Method: POST
+        - Authentication: None
+        - Permissions: None
+        - Body: JSON object containing the user's email.
+
+    Response:
+        - 200 OK: If the email exists, a reset link has been sent.
+        - 404 Not Found: No user is associated with the provided email.
+        - 400 Bad Request: Invalid data provided.
+    """
     serializer = EmailPasswordResetSerializer(data=request.data)
     if serializer.is_valid():
         email = serializer.validated_data['email']
@@ -88,6 +115,22 @@ def mail_reset_password(request):
 @authentication_classes([])
 @permission_classes([])
 def password_reset_confirm(request, uidb64, token):
+    """
+    Confirms the password reset using the provided token and user ID.
+
+    Request:
+        - Method: POST
+        - Authentication: None
+        - Permissions: None
+        - URL Parameters: 
+            - uidb64: Base64 encoded user ID.
+            - token: Password reset token.
+        - Body: JSON object containing the new password.
+
+    Response:
+        - 200 OK: Password has been reset successfully.
+        - 400 Bad Request: Invalid token, user ID, or data provided.
+    """
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=uid)
@@ -109,6 +152,19 @@ def password_reset_confirm(request, uidb64, token):
 @authentication_classes([])
 @permission_classes([])
 def register(request):
+    """
+    Registers a new user and sends a verification email.
+
+    Request:
+        - Method: POST
+        - Authentication: None
+        - Permissions: None
+        - Body: JSON object containing user registration details.
+
+    Response:
+        - 201 Created: User has been registered successfully and a verification email has been sent.
+        - 400 Bad Request: Invalid data provided.
+    """
     serializer = RegistrationSerializer(data=request.data)
     if serializer.is_valid():
         user = serializer.save()
@@ -153,6 +209,21 @@ def register(request):
 @authentication_classes([])
 @permission_classes([])
 def verify_email(request, uidb64, token):
+    """
+    Verifies the user's email using the provided token and user ID.
+
+    Request:
+        - Method: GET
+        - Authentication: None
+        - Permissions: None
+        - URL Parameters: 
+            - uidb64: Base64 encoded user ID.
+            - token: Email verification token.
+
+    Response:
+        - 200 OK: Email verified successfully and the account is now active.
+        - 400 Bad Request: Invalid token or user ID.
+    """
     try:
         uid = force_str(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=uid)

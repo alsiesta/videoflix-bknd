@@ -59,9 +59,29 @@ CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 
 def reset_password_form(request):
+    """
+    List all favorite videos of the authenticated user.
+
+    Request:
+        - Method: GET
+
+    Response:
+        - 200 OK: A list of favorite videos with their details.
+    """
     return render(request, 'user/password_reset_confirm.html')
 
 class LoginView(ObtainAuthToken):
+    """
+    List all favorite videos of the authenticated user.
+
+    Request:
+        - Method: GET
+        - Authentication: TokenAuthentication
+        - Permissions: IsAuthenticated
+
+    Response:
+        - 200 OK: A list of favorite videos with their details.
+    """
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data,
                                            context={'request': request})
@@ -86,6 +106,15 @@ class LoginView(ObtainAuthToken):
 
 @require_http_methods(["GET"])
 def custom_logout(request):
+    """
+    Log out the user and redirect to the index page.
+
+    Request:
+        - Method: GET
+
+    Response:
+        - 302 Found: Redirects to the index page.
+    """
     logout(request)
     return redirect('index')
 
@@ -97,6 +126,16 @@ def get_base_url():
     
 @login_required
 def password_change_view(request):
+    """
+    Render the password change form.
+
+    Request:
+        - Method: GET
+        - Authentication: Required
+
+    Response:
+        - 200 OK: Renders the password change form.
+    """
     return render(request, 'registration/password_change_form.html')
 
 @login_required
@@ -104,6 +143,13 @@ def password_change_view(request):
 def index(request):
     """
     Display the index page with any messages.
+
+    Request:
+        - Method: GET
+        - Authentication: Required
+
+    Response:
+        - 200 OK: Renders the index page with messages.
     """
     messages_to_display = messages.get_messages(request)
     return render(request, "index.html", {"messages": messages_to_display})
@@ -112,6 +158,15 @@ def index(request):
 def register_user(request):
     """
     Handle user registration and send account activation email.
+
+    Request:
+        - Method: POST
+        - Body: JSON object containing user registration details.
+
+    Response:
+        - 201 Created: Account created successfully and activation email sent.
+        - 400 Bad Request: Invalid data provided.
+        - 405 Method Not Allowed: If the request method is not POST.
     """
     if request.method == 'POST':
         try:
@@ -148,6 +203,15 @@ def register_user(request):
 def activate_account(request, uidb64, token):
     """
     Activate user account if the provided token is valid.
+
+    Request:
+        - Method: GET
+        - URL Parameters: 
+            - uidb64: Base64 encoded user ID.
+            - token: Account activation token.
+
+    Response:
+        - 302 Found: Redirects to the login page with a success or error message.
     """
     User = get_user_model()
     try:
@@ -179,6 +243,16 @@ def activate_account(request, uidb64, token):
 def resend_activation_link(request):
     """
     Resend activation link if the user requests it.
+
+    Request:
+        - Method: POST
+        - Body: JSON object containing the user's email.
+
+    Response:
+        - 200 OK: Activation link resent successfully.
+        - 400 Bad Request: Invalid data provided or account already active.
+        - 404 Not Found: User with the provided email does not exist.
+        - 405 Method Not Allowed: If the request method is not POST.
     """
     if request.method == 'POST':
         try:
@@ -215,6 +289,18 @@ def resend_activation_link(request):
         return JsonResponse({'error': 'Only POST method is allowed'}, status=405)
 
 class PasswordResetRequestView(APIView):
+    """
+    Handle password reset requests and send password reset email.
+
+    Request:
+        - Method: POST
+        - Body: JSON object containing the user's email.
+
+    Response:
+        - 200 OK: Password reset email sent successfully.
+        - 400 Bad Request: Invalid data provided.
+        - 404 Not Found: User with the provided email does not exist.
+    """
     permission_classes = [AllowAny]
     
     def post(self, request, *args, **kwargs):

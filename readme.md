@@ -9,8 +9,9 @@ This app has a frontend app you can find here: https://github.com/alsiesta/video
 ## Features
 
 - **User Management**: Registration, login, and password reset functionalities.
-- **Video Management**: Upload, manage, and stream videos.
 - **Email Notifications**: Send emails for registration and password reset.
+- <span style="color: red;">**IMPORTANT**: When you register a new user, you will first receive an email with a link. Click this link to activate your user. Otherwise you cannot log in.</span>
+- **Video Management**: Upload, manage, and stream videos.
 - **Redis Queue**: Background task processing using Redis.
 - **REST API**: Expose endpoints for frontend interaction.
 - **Admin Interface**: Manage users, videos, and other data through Django's admin interface.
@@ -48,12 +49,12 @@ lsb_release -a  #checks Ubuntu Instance
 
 ## Setup
 Rename the **'.env_example'** file to **'.env'**
-For review purposes by the "Developer Akademie" I left my personal credentials in this file like so: 
+
 
 ```
 //.env
-EMAIL_HOST_USER = 'schoenfeldalexander@googlemail.com'
-EMAIL_HOST_PASSWORD = 'ktmw rklg aurw fder'
+EMAIL_HOST_USER = 'your_email@public_email_provider.com'
+EMAIL_HOST_PASSWORD = 'your_public_email_key'
 DJANGO_DEBUG=True
 DEV_HOST='http://localhost'
 PROD_HOST='http://mysite.com'

@@ -25,7 +25,17 @@ CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def all_videos(request):
-    
+    """
+    Retrieve all videos.
+
+    Request:
+        - Method: GET
+        - Authentication: TokenAuthentication
+        - Permissions: IsAuthenticated
+
+    Response:
+        - 200 OK: A list of all videos with their details.
+    """
     videos = Video.objects.all()
     video_list = []
     for video in videos:
@@ -46,6 +56,20 @@ def all_videos(request):
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def get_video_by_id(request, video_id):
+    """
+    Retrieve a video by its ID.
+
+    Request:
+        - Method: GET
+        - Authentication: TokenAuthentication
+        - Permissions: IsAuthenticated
+        - URL Parameters: 
+            - video_id: ID of the video to retrieve.
+
+    Response:
+        - 200 OK: Video details if found.
+        - 404 Not Found: If the video does not exist.
+    """
     try:
         video = Video.objects.get(id=video_id)
     except Video.DoesNotExist:
@@ -58,6 +82,20 @@ def get_video_by_id(request, video_id):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def add_favorite(request, video_id):
+    """
+    Add or remove a video from the user's favorites.
+
+    Request:
+        - Method: POST
+        - Authentication: TokenAuthentication
+        - Permissions: IsAuthenticated
+        - URL Parameters: 
+            - video_id: ID of the video to add or remove from favorites.
+
+    Response:
+        - 201 Created: If the video was added to favorites.
+        - 200 OK: If the video was removed from favorites.
+    """
     video = Video.objects.get(id=video_id)
     favorite, created = Favorite.objects.get_or_create(user=request.user, video=video)
     if created:
@@ -69,6 +107,17 @@ def add_favorite(request, video_id):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def list_favorites(request):
+    """
+    List all favorite videos of the authenticated user.
+
+    Request:
+        - Method: GET
+        - Authentication: TokenAuthentication
+        - Permissions: IsAuthenticated
+
+    Response:
+        - 200 OK: A list of favorite videos with their details.
+    """
     favorites = Favorite.objects.filter(user=request.user).select_related('video')
     favorite_videos = [{'id': fav.video.id, 'title': fav.video.title, 'description': fav.video.description} for fav in favorites]
     return Response(favorite_videos)

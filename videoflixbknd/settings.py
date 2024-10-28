@@ -5,39 +5,59 @@ from unittest.mock import DEFAULT
 from dotenv import load_dotenv
 import os
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-DJANGO_ENV = os.getenv('DJANGO_ENV', 'development')
+# DEBUG = True
 
+# Load environment variables
+DJANGO_ENV = os.getenv('DJANGO_ENV')
+DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
+DEV_HOST = os.getenv('DEV_HOST')
+PROD_HOST = os.getenv('PROD_HOST')
+DEV_REDIS_HOST = os.getenv('DEV_REDIS_HOST')
+PROD_REDIS_HOST = os.getenv('PROD_REDIS_HOST')
+
+# Common settings
 SECRET_KEY = 'django-insecure-vujvv1ruvhk_p_67cz^v!x7oztsqgv0ech(ns2=^t90xzb1s=^'
 
-DEBUG = True
 
-# DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
-# DEV_HOST = os.getenv('DEV_HOST', '127.0.0.1')
-# PROD_HOST = os.getenv('PROD_HOST', 'your-production-domain.com')
+# Printing environment variables
+def print_env_vars():
+    print("DJANGO_ENV:", DJANGO_ENV)
+    print("DEBUG:", DEBUG)
+    print("DEV_HOST:", DEV_HOST)
+    print("PROD_HOST:", PROD_HOST)
+    print("DEV_REDIS_HOST:", DEV_REDIS_HOST)
+    print("PROD_REDIS_HOST:", PROD_REDIS_HOST)
+    print("ALLOWED_HOSTS:", ALLOWED_HOSTS)
+    print("FRONTEND_HOST:", FRONTEND_HOST)
+    print("CORS_ALLOWED_ORIGINS:", CORS_ALLOWED_ORIGINS)
+    
+    
+if DEBUG:
+    ALLOWED_HOSTS = [DEV_HOST, '127.0.0.1', 'localhost', 'localhost:4200']
+    FRONTEND_HOST = os.getenv('FRONTEND_HOST_DEV', 'http://localhost:4200')
+    CORS_ALLOWED_ORIGINS = [
+        'http://localhost:4200'
+    ]
+    # print_env_vars()
+else:
+    ALLOWED_HOSTS = [PROD_HOST, 'your-production-domain.com']
+    FRONTEND_HOST = os.getenv('FRONTEND_HOST_PROD', 'https://videoflix.alsiesta.com')
+    CORS_ALLOWED_ORIGINS = [
+        'https://videoflix.alsiesta.com'
+    ]
+    # print_env_vars()
 
-# if DEBUG:
-#     ALLOWED_HOSTS = [DEV_HOST, '127.0.0.1', 'localhost','localhost:4200']
-# else:
-#     ALLOWED_HOSTS = [PROD_HOST, 'your-production-domain.com']
 
-FRONTEND_HOST = os.getenv('FRONTEND_HOST')
 
-# ALLOWED_HOSTS = ['videoflix.alsiesta.com/login','videoflix.alsiesta.com', '35.242.249.215', 'localhost', '127.0.0.1', 'localhost:4200']
-ALLOWED_HOSTS = ['*']
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:4200', 'http://videoflix.alsiesta.com', 'https://videoflix.alsiesta.com'
-]
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:4200', 'https://videoflix.alsiesta.com',
 ]
+
 INTERNAL_IPS = ["127.0.0.1"]
 
 INSTALLED_APPS = [
@@ -53,7 +73,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'django_rq',
-    'user',
+    'user.apps.UserConfig',
 ]
 
 MIDDLEWARE = [
@@ -166,7 +186,7 @@ if DJANGO_ENV == 'production':
     CACHES = {
         'default': {
             'BACKEND': 'django_redis.cache.RedisCache',
-            'LOCATION': 'redis://10.156.0.2:6379/1',
+            'LOCATION': f'redis://{PROD_REDIS_HOST}:6379/1',
             'OPTIONS': {
                 "CLIENT_CLASS": "django_redis.client.DefaultClient",
             },
@@ -176,8 +196,8 @@ if DJANGO_ENV == 'production':
 
     RQ_QUEUES = {
         'default': {
-            'URL': 'redis://10.156.0.2:6379/0',
-            'HOST': '10.156.0.2',
+            'URL': f'redis://{PROD_REDIS_HOST}:6379/0',
+            'HOST': PROD_REDIS_HOST,
             'PORT': 6379,
             'DB': 0,
             'DEFAULT_TIMEOUT': 360,
@@ -187,7 +207,7 @@ else:
     CACHES = {
         'default': {
             'BACKEND': 'django_redis.cache.RedisCache',
-            'LOCATION': 'redis://172.28.165.239:6379/1',
+            'LOCATION': f'redis://{DEV_REDIS_HOST}:6379/1',
             'OPTIONS': {
                 "CLIENT_CLASS": "django_redis.client.DefaultClient",
             },
@@ -197,8 +217,8 @@ else:
 
     RQ_QUEUES = {
         'default': {
-            'URL': 'redis://172.28.165.239:6379/0',
-            'HOST': '172.28.165.239',
+            'URL': f'redis://{DEV_REDIS_HOST}:6379/0',
+            'HOST': DEV_REDIS_HOST,
             'PORT': 6379,
             'DB': 0,
             'DEFAULT_TIMEOUT': 360,
